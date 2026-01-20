@@ -20,7 +20,6 @@ function Records({ caregiverId, caregiverName, onLogout }: RecordsProps) {
   const [editingRecord, setEditingRecord] = useState<Record | null>(null)
   const [refreshing, setRefreshing] = useState(false)
   const [settings, setSettings] = useState<Settings>(() => loadSettings())
-  const [nowTick, setNowTick] = useState<number>(Date.now())
 
   useEffect(() => {
     const onChanged = () => setSettings(loadSettings())
@@ -30,12 +29,6 @@ function Records({ caregiverId, caregiverName, onLogout }: RecordsProps) {
       window.removeEventListener('babyRecordSettingsChanged', onChanged)
       window.removeEventListener('storage', onChanged)
     }
-  }, [])
-
-  // keep "next time" display fresh
-  useEffect(() => {
-    const id = window.setInterval(() => setNowTick(Date.now()), 30_000)
-    return () => window.clearInterval(id)
   }, [])
 
   const fetchRecords = async () => {
@@ -115,7 +108,6 @@ function Records({ caregiverId, caregiverName, onLogout }: RecordsProps) {
   const lastPumping = records.find((r) => r.event === '擠奶')?.time ?? null
   const nextFeeding = computeNextTime(lastFeeding, settings.feedingIntervalMinutes)
   const nextPumping = computeNextTime(lastPumping, settings.pumpingIntervalMinutes)
-  const _ = nowTick // re-render ticker
 
   return (
     <div className="records-container">
