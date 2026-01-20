@@ -1,0 +1,69 @@
+.action-buttons-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  min-height: 110px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.action-button {
+  border: none;
+  border-radius: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:active:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feeding-button {
+  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+}
+
+.pumping-button {
+  background: linear-gradient(135deg, #2196f3 0%, #42a5f5 100%);
+}
+
+.poop-button {
+  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+}
+
+.pee-button {
+  background: linear-gradient(135deg, #fdd835 0%, #ffee58 100%);
+  color: #4e342e;
+}
+
+@media (max-width: 768px) {
+  .action-buttons-container {
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .action-button {
+    font-size: 18px;
+  }
+}

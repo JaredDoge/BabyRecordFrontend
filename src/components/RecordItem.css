@@ -1,0 +1,110 @@
+.record-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.record-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.record-feeding {
+  background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 100%);
+}
+
+.record-pumping {
+  background: linear-gradient(135deg, #b3d9ff 0%, #cce5ff 100%);
+}
+
+.record-poop {
+  background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+}
+
+.record-pee {
+  background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+}
+
+.record-content {
+  flex: 1;
+}
+
+.record-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.summary-time {
+  font-size: 18px;
+  color: #111;
+  font-weight: 800;
+}
+
+.summary-event {
+  font-size: 18px;
+  color: #111;
+  font-weight: 900;
+}
+
+.record-caretaker {
+  align-self: flex-end;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.action-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.edit-button {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-weight: 600;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.edit-button:hover {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  transform: scale(1.05);
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+.delete-button {
+  background: #ff6b6b;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #ff5252;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .record-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .record-actions {
+    width: auto;
+    justify-content: flex-end;
+  }
+}

@@ -1,0 +1,108 @@
+.settings-container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-header {
+  background: #fff;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header h1 {
+  font-size: 20px;
+  color: #333;
+}
+
+.settings-back {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: #222;
+  font-weight: 600;
+}
+
+.settings-spacer {
+  width: 72px;
+}
+
+.settings-main {
+  padding: 20px;
+  flex: 1;
+}
+
+.settings-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.settings-card h2 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.settings-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+}
+
+.settings-field:first-of-type {
+  border-top: none;
+}
+
+.settings-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.settings-field input {
+  width: 140px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  font-size: 16px;
+}
+
+.settings-field input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.settings-save {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.settings-saved {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
