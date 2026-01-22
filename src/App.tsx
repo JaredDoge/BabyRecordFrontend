@@ -5,20 +5,9 @@ import Settings from './pages/Settings'
 import { useState, useEffect } from 'react'
 
 function App() {
-  const [caregiverId, setCaregiverId] = useState<string | null>(
-    localStorage.getItem('caregiverId')
-  )
   const [caregiverName, setCaregiverName] = useState<string | null>(
     localStorage.getItem('caregiverName')
   )
-
-  useEffect(() => {
-    if (caregiverId) {
-      localStorage.setItem('caregiverId', caregiverId)
-    } else {
-      localStorage.removeItem('caregiverId')
-    }
-  }, [caregiverId])
 
   useEffect(() => {
     if (caregiverName) {
@@ -34,23 +23,24 @@ function App() {
         <Route
           path="/login"
           element={
+            caregiverName ? (
+              <Navigate to="/records" replace />
+            ) : (
             <Login
-              onLogin={(id, name) => {
-                setCaregiverId(id)
+              onLogin={(name) => {
                 setCaregiverName(name)
               }}
             />
+            )
           }
         />
         <Route
           path="/records"
           element={
-            caregiverId ? (
+            caregiverName ? (
               <Records
-                caregiverId={caregiverId}
                 caregiverName={caregiverName || ''}
                 onLogout={() => {
-                  setCaregiverId(null)
                   setCaregiverName(null)
                 }}
               />
@@ -61,9 +51,12 @@ function App() {
         />
         <Route
           path="/settings"
-          element={caregiverId ? <Settings /> : <Navigate to="/login" replace />}
+          element={caregiverName ? <Settings /> : <Navigate to="/login" replace />}
         />
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/"
+          element={<Navigate to={caregiverName ? '/records' : '/login'} replace />}
+        />
       </Routes>
     </Router>
   )

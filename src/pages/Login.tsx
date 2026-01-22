@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { api } from '../api/client'
 import './Login.css'
 
 interface LoginProps {
-  onLogin: (caregiverId: string, caregiverName: string) => void
+  onLogin: (caregiverName: string) => void
 }
 
 function Login({ onLogin }: LoginProps) {
@@ -24,11 +23,11 @@ function Login({ onLogin }: LoginProps) {
     setError('')
 
     try {
-      const response = await api.login(name.trim())
-      onLogin(response.caregiver_id.toString(), name.trim())
+      // nickname-only: no backend verification
+      onLogin(name.trim())
       navigate('/records')
     } catch (err: any) {
-      setError(err.response?.data?.message || '登入失敗，請稍後再試')
+      setError('登入失敗，請稍後再試')
     } finally {
       setLoading(false)
     }

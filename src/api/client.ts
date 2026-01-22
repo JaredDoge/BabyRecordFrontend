@@ -18,18 +18,13 @@ export type RecordEvent = '餵奶' | '擠奶' | '大便' | '小便'
 
 export interface Record {
   record_id: number
-  caregiver_id: number
   caregiver_name: string
   time: string
   event: RecordEvent
 }
 
-export interface LoginResponse {
-  caregiver_id: number
-}
-
 export interface CreateRecordRequest {
-  caregiver_id: number
+  caregiver_name: string
   time: string
   event: RecordEvent
 }
@@ -41,17 +36,8 @@ export interface UpdateRecordRequest {
 }
 
 export const api = {
-  login: async (name: string): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>('/api/caregivers/login', {
-      caregiver_name: name,
-    })
-    return response.data
-  },
-
-  getRecords: async (caregiverId?: number): Promise<Record[]> => {
-    const url = caregiverId 
-      ? `/api/records?caregiver_id=${caregiverId}`
-      : '/api/records'
+  getRecords: async (): Promise<Record[]> => {
+    const url = '/api/records'
     const response = await apiClient.get<Record[]>(url)
     return response.data
   },

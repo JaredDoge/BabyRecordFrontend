@@ -8,12 +8,11 @@ import EditModal from '../components/EditModal'
 import './Records.css'
 
 interface RecordsProps {
-  caregiverId: string
   caregiverName: string
   onLogout: () => void
 }
 
-function Records({ caregiverId, caregiverName, onLogout }: RecordsProps) {
+function Records({ caregiverName, onLogout }: RecordsProps) {
   const navigate = useNavigate()
   const [records, setRecords] = useState<Record[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,13 +47,13 @@ function Records({ caregiverId, caregiverName, onLogout }: RecordsProps) {
 
   useEffect(() => {
     fetchRecords()
-  }, [caregiverId])
+  }, [])
 
   const handleCreateRecord = async (event: RecordEvent) => {
     setRefreshing(true)
     try {
       await api.createRecord({
-        caregiver_id: parseInt(caregiverId),
+        caregiver_name: caregiverName,
         time: new Date().toISOString(),
         event,
       })
