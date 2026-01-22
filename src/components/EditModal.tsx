@@ -4,7 +4,7 @@ import './EditModal.css'
 
 interface EditModalProps {
   record: Record
-  onUpdate: (recordId: number, time: string, event: '餵奶' | '擠奶' | '大便' | '小便') => void
+  onUpdate: (recordId: number, time: string, event: '餵奶' | '擠奶' | '大便' | '小便', notes?: string) => void
   onDelete: (recordId: number) => void
   onClose: () => void
 }
@@ -12,6 +12,7 @@ interface EditModalProps {
 function EditModal({ record, onUpdate, onDelete, onClose }: EditModalProps) {
   const [time, setTime] = useState('')
   const [event, setEvent] = useState<'餵奶' | '擠奶' | '大便' | '小便'>(record.event)
+  const [notes, setNotes] = useState(record.notes || '')
 
   useEffect(() => {
     const date = new Date(record.time)
@@ -19,6 +20,7 @@ function EditModal({ record, onUpdate, onDelete, onClose }: EditModalProps) {
       .toISOString()
       .slice(0, 16)
     setTime(localDateTime)
+    setNotes(record.notes || '')
   }, [record])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -28,7 +30,7 @@ function EditModal({ record, onUpdate, onDelete, onClose }: EditModalProps) {
       return
     }
     const isoTime = new Date(time).toISOString()
-    onUpdate(record.record_id, isoTime, event)
+    onUpdate(record.record_id, isoTime, event, notes)
   }
 
   const handleDelete = () => {
@@ -87,6 +89,15 @@ function EditModal({ record, onUpdate, onDelete, onClose }: EditModalProps) {
                 小便
               </button>
             </div>
+          </div>
+          <div className="form-group">
+            <label>備註</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="輸入備註內容..."
+              rows={3}
+            />
           </div>
           <div className="modal-actions">
             <button type="button" className="delete-in-modal-button" onClick={handleDelete}>

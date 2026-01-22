@@ -21,18 +21,21 @@ export interface Record {
   caregiver_name: string
   time: string
   event: RecordEvent
+  notes?: string
 }
 
 export interface CreateRecordRequest {
   caregiver_name: string
   time: string
   event: RecordEvent
+  notes?: string
 }
 
 export interface UpdateRecordRequest {
   record_id: number
   time: string
   event: RecordEvent
+  notes?: string
 }
 
 export const api = {
@@ -51,6 +54,7 @@ export const api = {
     const response = await apiClient.put<{ record_id: number }>(`/api/records/${data.record_id}`, {
       time: data.time,
       event: data.event,
+      notes: data.notes,
     })
     return response.data
   },

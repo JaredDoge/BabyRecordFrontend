@@ -72,18 +72,28 @@ form {
   font-size: 16px;
 }
 
-.form-group input[type="datetime-local"] {
+.form-group input[type="datetime-local"],
+.form-group textarea {
+  display: block;
   width: 100%;
+  box-sizing: border-box;
   padding: 12px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.3s;
+  font-family: inherit;
 }
 
-.form-group input[type="datetime-local"]:focus {
+.form-group input[type="datetime-local"]:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #667eea;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .event-buttons {

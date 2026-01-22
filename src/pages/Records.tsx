@@ -30,23 +30,41 @@ function Records({ caregiverName, onLogout }: RecordsProps) {
     }
   }, [])
 
-  const fetchRecords = async () => {
+  const fetchRecords = async (isSilent = false) => {
+    if (!isSilent) setLoading(true)
     try {
-      // Get all records from all caregivers to show who did what
       const data = await api.getRecords()
-      // Sort by time descending (newest first)
       const sorted = data.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
       setRecords(sorted)
     } catch (err) {
       console.error('Failed to fetch records:', err)
     } finally {
-      setLoading(false)
+      if (!isSilent) setLoading(false)
       setRefreshing(false)
     }
   }
 
   useEffect(() => {
     fetchRecords()
+
+    // Auto refresh logic
+    const intervalId = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        fetchRecords(true)
+      }
+    }, 30000) // Refresh every 30 seconds if visible
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchRecords(true)
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
+    return () => {
+      clearInterval(intervalId)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    }
   }, [])
 
   const handleCreateRecord = async (event: RecordEvent) => {
@@ -82,13 +100,14 @@ function Records({ caregiverName, onLogout }: RecordsProps) {
     }
   }
 
-  const handleUpdate = async (recordId: number, time: string, event: RecordEvent) => {
+  const handleUpdate = async (recordId: number, time: string, event: RecordEvent, notes?: string) => {
     setRefreshing(true)
     try {
       await api.updateRecord({
         record_id: recordId,
         time,
         event,
+        notes,
       })
       setEditingRecord(null)
       await fetchRecords()

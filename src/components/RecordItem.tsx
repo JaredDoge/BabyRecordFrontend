@@ -31,6 +31,9 @@ function RecordItem({ record, onEdit }: RecordItemProps) {
           <span className="summary-event">{record.event}</span>
           <span className="summary-time">{formatted}</span>
         </div>
+        {record.notes && (
+          <div className="record-notes">{record.notes}</div>
+        )}
       </div>
       <div className="record-caretaker">{record.caregiver_name}</div>
     </div>
