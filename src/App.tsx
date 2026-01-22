@@ -26,11 +26,11 @@ function App() {
             caregiverName ? (
               <Navigate to="/records" replace />
             ) : (
-            <Login
-              onLogin={(name) => {
-                setCaregiverName(name)
-              }}
-            />
+              <Login
+                onLogin={(name) => {
+                  setCaregiverName(name)
+                }}
+              />
             )
           }
         />
@@ -51,7 +51,7 @@ function App() {
         />
         <Route
           path="/settings"
-          element={caregiverName ? <Settings /> : <Navigate to="/login" replace />}
+          element={caregiverName ? <Settings caregiverName={caregiverName} /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/"

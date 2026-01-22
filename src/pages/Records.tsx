@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { api, Record, type RecordEvent } from '../api/client'
-import { computeNextTime, formatLocalDateTime, loadSettings, type Settings } from '../utils/settings'
+import { computeNextTime, formatLocalDateTime, formatTimeRemaining, type Settings } from '../utils/settings'
 import { useNavigate } from 'react-router-dom'
 import RecordItem from '../components/RecordItem'
 import ActionButtons from '../components/ActionButtons'
@@ -18,17 +18,24 @@ function Records({ caregiverName, onLogout }: RecordsProps) {
   const [loading, setLoading] = useState(true)
   const [editingRecord, setEditingRecord] = useState<Record | null>(null)
   const [refreshing, setRefreshing] = useState(false)
-  const [settings, setSettings] = useState<Settings>(() => loadSettings())
+  const [settings, setSettings] = useState<Settings>({ feeding_interval: 180, pumping_interval: 240 })
+  const [, setTick] = useState(0) // Used to force re-render every minute for countdown
 
   useEffect(() => {
-    const onChanged = () => setSettings(loadSettings())
-    window.addEventListener('babyRecordSettingsChanged', onChanged)
-    window.addEventListener('storage', onChanged)
-    return () => {
-      window.removeEventListener('babyRecordSettingsChanged', onChanged)
-      window.removeEventListener('storage', onChanged)
+    const fetchSettings = async () => {
+      try {
+        const s = await api.getSettings()
+        setSettings(s)
+      } catch (err) {
+        console.error('Failed to fetch settings:', err)
+      }
     }
-  }, [])
+    fetchSettings()
+
+    // Timer for countdown updates
+    const timer = setInterval(() => setTick((t) => t + 1), 60000)
+    return () => clearInterval(timer)
+  }, [caregiverName])
 
   const fetchRecords = async (isSilent = false) => {
     if (!isSilent) setLoading(true)
@@ -124,8 +131,8 @@ function Records({ caregiverName, onLogout }: RecordsProps) {
 
   const lastFeeding = records.find((r) => r.event === '餵奶')?.time ?? null
   const lastPumping = records.find((r) => r.event === '擠奶')?.time ?? null
-  const nextFeeding = computeNextTime(lastFeeding, settings.feedingIntervalMinutes)
-  const nextPumping = computeNextTime(lastPumping, settings.pumpingIntervalMinutes)
+  const nextFeeding = computeNextTime(lastFeeding, settings.feeding_interval)
+  const nextPumping = computeNextTime(lastPumping, settings.pumping_interval)
 
   return (
     <div className="records-container">
@@ -147,13 +154,23 @@ function Records({ caregiverName, onLogout }: RecordsProps) {
           <div className="next-card next-feeding">
             <div className="next-title">下次餵奶</div>
             <div className="next-time">
-              {nextFeeding ? formatLocalDateTime(nextFeeding) : '尚無餵奶記錄'}
+              {nextFeeding ? (
+                <>
+                  {formatLocalDateTime(nextFeeding)}
+                  <span className="time-remaining"> {formatTimeRemaining(nextFeeding)}</span>
+                </>
+              ) : '尚無餵奶記錄'}
             </div>
           </div>
           <div className="next-card next-pumping">
             <div className="next-title">下次擠奶</div>
             <div className="next-time">
-              {nextPumping ? formatLocalDateTime(nextPumping) : '尚無擠奶記錄'}
+              {nextPumping ? (
+                <>
+                  {formatLocalDateTime(nextPumping)}
+                  <span className="time-remaining"> {formatTimeRemaining(nextPumping)}</span>
+                </>
+              ) : '尚無擠奶記錄'}
             </div>
           </div>
         </div>

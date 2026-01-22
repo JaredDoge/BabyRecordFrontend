@@ -38,6 +38,13 @@ export interface UpdateRecordRequest {
   notes?: string
 }
 
+export interface Settings {
+  feeding_interval: number
+  pumping_interval: number
+  last_modified_by?: string
+  updated_at?: string
+}
+
 export const api = {
   getRecords: async (): Promise<Record[]> => {
     const url = '/api/records'
@@ -61,6 +68,17 @@ export const api = {
 
   deleteRecord: async (recordId: number): Promise<{ record_id: number }> => {
     const response = await apiClient.delete<{ record_id: number }>(`/api/records/${recordId}`)
+    return response.data
+  },
+  getSettings: async (): Promise<Settings> => {
+    const response = await apiClient.get<Settings>('/api/settings')
+    return response.data
+  },
+  updateSettings: async (caregiverName: string, data: { feeding_interval: number; pumping_interval: number }): Promise<{ success: boolean }> => {
+    const response = await apiClient.put<{ success: boolean }>('/api/settings', {
+      ...data,
+      caregiver_name: caregiverName
+    })
     return response.data
   },
 }

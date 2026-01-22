@@ -1,31 +1,27 @@
 export type EventType = '餵奶' | '擠奶'
 
 export type Settings = {
-  feedingIntervalMinutes: number
-  pumpingIntervalMinutes: number
+  feeding_interval: number
+  pumping_interval: number
 }
 
 const STORAGE_KEY = 'babyRecordSettingsV1'
 
 export const DEFAULT_SETTINGS: Settings = {
-  feedingIntervalMinutes: 180,
-  pumpingIntervalMinutes: 240,
+  feeding_interval: 180,
+  pumping_interval: 240,
 }
 
 export function loadSettings(): Settings {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return DEFAULT_SETTINGS
-    const parsed = JSON.parse(raw) as Partial<Settings>
+    const parsed = JSON.parse(raw)
     return {
-      feedingIntervalMinutes:
-        typeof parsed.feedingIntervalMinutes === 'number' && parsed.feedingIntervalMinutes > 0
-          ? parsed.feedingIntervalMinutes
-          : DEFAULT_SETTINGS.feedingIntervalMinutes,
-      pumpingIntervalMinutes:
-        typeof parsed.pumpingIntervalMinutes === 'number' && parsed.pumpingIntervalMinutes > 0
-          ? parsed.pumpingIntervalMinutes
-          : DEFAULT_SETTINGS.pumpingIntervalMinutes,
+      feeding_interval:
+        (parsed.feeding_interval || parsed.feedingIntervalMinutes) || DEFAULT_SETTINGS.feeding_interval,
+      pumping_interval:
+        (parsed.pumping_interval || parsed.pumpingIntervalMinutes) || DEFAULT_SETTINGS.pumping_interval,
     }
   } catch {
     return DEFAULT_SETTINGS
@@ -70,5 +66,19 @@ export function computeNextTime(
   const base = new Date(lastIsoTime)
   if (Number.isNaN(base.getTime())) return null
   return new Date(base.getTime() + intervalMinutes * 60_000)
+}
+
+export function formatTimeRemaining(target: Date, now: Date = new Date()): string {
+  const diffMs = target.getTime() - now.getTime()
+  if (diffMs <= 0) return '(即刻)'
+
+  const totalMin = Math.floor(diffMs / 60_000)
+  const hours = Math.floor(totalMin / 60)
+  const mins = totalMin % 60
+
+  if (hours > 0) {
+    return `(${hours}小時${mins}分後)`
+  }
+  return `(${mins}分後)`
 }
 
